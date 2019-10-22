@@ -2423,7 +2423,7 @@ bool CWallet::CreateCoinStake(
                 return error("CreateCoinStake : exceeded coinstake size limit");
 
             //Masternode payment
-            FillBlockPayee(txNew, nMinFee, true, stakeInput->IsZXNK());
+            //FillBlockPayee(txNew, nMinFee, true, stakeInput->IsZXNK());
 
             {
                 TRY_LOCK(zxnkTracker->cs_spendcache, fLocked);
