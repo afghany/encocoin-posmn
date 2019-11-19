@@ -560,9 +560,13 @@ LogPrintf("%s 0\n", __func__);
     CAmount requiredMasternodePayment = GetMasternodePayment(nBlockHeight, nReward, nMasternode_Drift_Count, txNew.HasZerocoinSpendInputs());
 
     //require at least 6 signatures
-    for (CMasternodePayee& payee : vecPayments)
+    int i = 0;
+    for (CMasternodePayee& payee : vecPayments) {
+        LogPrintf("%s 0.1 nMaxSignatures:%d i:%d payee.nVotes:%d\n", __func__, nMaxSignatures, i, payee.nVotes);
         if (payee.nVotes >= nMaxSignatures && payee.nVotes >= MNPAYMENTS_SIGNATURES_REQUIRED)
             nMaxSignatures = payee.nVotes;
+    i++;
+    }
 LogPrintf("%s 1 nMaxSignatures:%d\n", __func__, nMaxSignatures);
     // if we don't have at least 6 signatures on a payee, approve whichever is the longest chain
     if (nMaxSignatures < MNPAYMENTS_SIGNATURES_REQUIRED) return true;
