@@ -541,7 +541,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
 
     int nMaxSignatures = 0;
     int nMasternode_Drift_Count = 0;
-
+LogPrintf("%s 0\n", __func__);
     std::string strPayeesPossible = "";
 
     CAmount nReward = GetBlockValue(nBlockHeight);
@@ -563,10 +563,10 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
     for (CMasternodePayee& payee : vecPayments)
         if (payee.nVotes >= nMaxSignatures && payee.nVotes >= MNPAYMENTS_SIGNATURES_REQUIRED)
             nMaxSignatures = payee.nVotes;
-
+LogPrintf("%s 1 nMaxSignatures:%d\n", __func__, nMaxSignatures);
     // if we don't have at least 6 signatures on a payee, approve whichever is the longest chain
     if (nMaxSignatures < MNPAYMENTS_SIGNATURES_REQUIRED) return true;
-
+LogPrintf("%s 2\n", __func__);
     for (CMasternodePayee& payee : vecPayments) {
         bool found = false;
         for (CTxOut out : txNew.vout) {
@@ -577,10 +577,11 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
                     LogPrint("masternode","Masternode payment is out of drift range. Paid=%s Min=%s\n", FormatMoney(out.nValue).c_str(), FormatMoney(requiredMasternodePayment).c_str());
             }
         }
-
+LogPrintf("%s 3 payee.nVotes:%d\n", __func__, payee.nVotes);
         if (payee.nVotes >= MNPAYMENTS_SIGNATURES_REQUIRED) {
+            LogPrintf("%s 4\n", __func__);
             if (found) return true;
-
+LogPrintf("%s 5\n", __func__);
             CTxDestination address1;
             ExtractDestination(payee.scriptPubKey, address1);
             CBitcoinAddress address2(address1);
